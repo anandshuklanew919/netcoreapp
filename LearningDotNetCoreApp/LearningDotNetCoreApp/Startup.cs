@@ -19,6 +19,9 @@ namespace LearningDotNetCoreApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+        #if DEBUG
+            services.AddRazorPages().AddRazorRuntimeCompilation(); // for compilation of razor pages at run time
+        #endif
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
