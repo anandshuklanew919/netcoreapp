@@ -28,10 +28,10 @@ namespace LearningDotNetCoreApp.Repository
         {
             return new List<BookModal>()
             {
-                new BookModal(){Id=1, Title ="MVC" , Author ="Anand Shukla" },
-                new BookModal(){ Id=2 , Title = "Dot Net Core" , Author="Ankit Shukla"},
-                new BookModal(){ Id=3 , Title = "Azure Fundamental" , Author="Satya"},
-                new BookModal(){ Id=4 , Title = "Angular" , Author="Mansi"}
+                new BookModal(){Id=1, Title ="MVC" , Author ="Anand Shukla" ,  Description = "This book is for MVC",Category="Programming", Language="English" , TotalPages=1002},
+                new BookModal(){ Id=2 , Title = "Dot Net Core" , Author="Ankit Shukla",  Description = "This book is for Dot Net Core",Category="Programming", Language="English" , TotalPages=500},
+                new BookModal(){ Id=3 , Title = "Azure Fundamental" , Author="Satya",Description = "This book is for Azure Fundamental",Category="Cloud Tech", Language="English" , TotalPages=600},
+                new BookModal(){ Id=4 , Title = "Angular" , Author="Mansi",Description = "This book is for Angular",Category="Programming", Language="English" , TotalPages=650}
             };
         }
     }

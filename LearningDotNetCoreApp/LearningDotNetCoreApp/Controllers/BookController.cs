@@ -15,9 +15,16 @@ namespace LearningDotNetCoreApp.Controllers
         {
             bookRepository = new BookRepository();
         }
-        public List<BookModal> Index()
+        public ViewResult GetAllBooks()
         {
-            return bookRepository.GetBooks();
+            var data = bookRepository.GetBooks();
+            return View(data);
+        }
+
+        public ViewResult GetBook(int id)
+        {
+            var data = bookRepository.GetBooks().Where(book=> book.Id== id);
+            return View(data);
         }
 
 
