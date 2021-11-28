@@ -1,4 +1,6 @@
-﻿using LearningDotNetCoreApp.Modals;
+﻿using LearningDotNetCoreApp.Data;
+using LearningDotNetCoreApp.Modals;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,20 +10,57 @@ namespace LearningDotNetCoreApp.Repository
 {
     public class BookRepository
     {
-        public List<BookModal> GetBooks()
+
+        private readonly BookStoreContext _context;
+
+        public BookRepository(BookStoreContext bookStoreContext)
         {
-            return BookRepository.GetBookDataSource();
+            _context = bookStoreContext;
+        }
+        public async Task<List<BookModal>> GetBooks()
+        {
+            var books = new List<BookModal>();
+            var allbooks = await _context.books.ToListAsync();
+            if (allbooks?.Any() == true)
+            {
+                foreach (var book in allbooks)
+                {
+                    books.Add(new BookModal()
+                    {
+                        Id = book.Id,
+                        Author = book.Author,
+                        Title = book.Title,
+                        Description = book.Description,
+                        TotalPages = book.TotalPages,
+                        Category = book.Category,
+                        Language = book.Language
+
+                    });
+                }
+            }
+            return books;
         }
 
-        public BookModal GetBookById(int id)
+        public async Task<BookModal> GetBookById(int id)
         {
-            return BookRepository.GetBookDataSource().Where(book => book.Id == id).FirstOrDefault();
+            var data = await _context.books.FindAsync(id);
+            var book = new BookModal()
+            {
+                Id = data.Id,
+                Author = data.Author,
+                Title = data.Title,
+                Description = data.Description,
+                TotalPages = data.TotalPages,
+                Category = data.Category,
+                Language = data.Language
+            };
+            return book;
         }
 
 
         public List<BookModal> SearchBook(string title, string author)
         {
-            return BookRepository.GetBookDataSource().Where(book => book.Title.Contains(title,StringComparison.OrdinalIgnoreCase) && book.Author.Contains(author, StringComparison.OrdinalIgnoreCase)).ToList();
+            return BookRepository.GetBookDataSource().Where(book => book.Title.Contains(title, StringComparison.OrdinalIgnoreCase) && book.Author.Contains(author, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         private static List<BookModal> GetBookDataSource()
@@ -33,6 +72,23 @@ namespace LearningDotNetCoreApp.Repository
                 new BookModal(){ Id=3 , Title = "Azure Fundamental" , Author="Satya",Description = "This book is for Azure Fundamental",Category="Cloud Tech", Language="English" , TotalPages=600},
                 new BookModal(){ Id=4 , Title = "Angular" , Author="Mansi",Description = "This book is for Angular",Category="Programming", Language="English" , TotalPages=650}
             };
+        }
+
+        public async Task<int> AddNewBook(BookModal bookModal)
+        {
+            var book = new Books()
+            {
+                Author = bookModal.Author,
+                CreatedOn = DateTime.UtcNow,
+                Description = bookModal.Description,
+                Title = bookModal.Title,
+                TotalPages = bookModal.TotalPages.HasValue  ? bookModal.TotalPages.Value : 0,
+                UpdatedOn = DateTime.UtcNow
+            };
+            await _context.books.AddAsync(book);
+            await _context.SaveChangesAsync();
+
+            return book.Id;
         }
     }
 }

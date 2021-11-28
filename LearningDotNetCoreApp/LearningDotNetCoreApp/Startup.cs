@@ -1,6 +1,9 @@
+using LearningDotNetCoreApp.Data;
+using LearningDotNetCoreApp.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -18,10 +21,14 @@ namespace LearningDotNetCoreApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BookStoreContext>( options => options.UseSqlServer("Server=.;Database=BookStore;Integrated Security=True;"));
+
             services.AddControllersWithViews();
         #if DEBUG
             services.AddRazorPages().AddRazorRuntimeCompilation(); // for compilation of razor pages at run time
-        #endif
+#endif
+
+            services.AddScoped<BookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +53,9 @@ namespace LearningDotNetCoreApp
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                //endpoints.MapControllerRoute(name: "Default",
+                //    pattern:"bookapp/{ controller = Home}/{ action = Index}/{ id ?}"
+                //    );
             });
 
         }

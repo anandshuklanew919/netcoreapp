@@ -1,4 +1,5 @@
-﻿using LearningDotNetCoreApp.Modals;
+﻿using LearningDotNetCoreApp.Data;
+using LearningDotNetCoreApp.Modals;
 using LearningDotNetCoreApp.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,32 +11,58 @@ namespace LearningDotNetCoreApp.Controllers
 {
     public class BookController : Controller
     {
-        private readonly BookRepository bookRepository;
-        public BookController()
+        private readonly BookRepository _bookRepository;
+        public BookController(BookRepository bookRepository)
         {
-            bookRepository = new BookRepository();
+            this._bookRepository = bookRepository;
         }
-        public ViewResult GetAllBooks()
+        public async Task<ViewResult> GetAllBooks()
         {
-            var data = bookRepository.GetBooks();
+            var data = await _bookRepository.GetBooks();
             return View(data);
         }
 
-        public ViewResult GetBook(int id)
+        public async Task<ViewResult> GetBook(int id)
         {
-            var data = bookRepository.GetBooks().Where(book=> book.Id== id);
+            var data =  await _bookRepository.GetBookById(id);
             return View(data);
         }
 
 
-        public BookModal GetBooksByid(int id)
+        public async Task<ViewResult> GetBooksByid(int id)
         {
-            return bookRepository.GetBookById(id);
+            var data = await _bookRepository.GetBookById(id);
+            return View(data);
         }
 
         public List<BookModal> SearchBooks(string title, string name)
         {
-            return bookRepository.SearchBook(title, name);
+            return _bookRepository.SearchBook(title, name);
+        }
+
+
+        public ActionResult AddNewBook(bool isSuccess = false, int bookId = 0)
+        {
+            ViewBag.isSuccess = isSuccess;
+            ViewBag.BookId = bookId;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> AddNewBook(BookModal bookModal)
+        {
+            if (ModelState.IsValid)
+            {
+                int id = await _bookRepository.AddNewBook(bookModal);
+
+                if (id > 0)
+                {
+                    return RedirectToAction(nameof(AddNewBook), new { isSuccess = true, bookId = id });
+                }
+            }
+           
+
+            return View();
         }
     }
 }
