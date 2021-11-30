@@ -1,0 +1,28 @@
+﻿@model LearningDotNetCoreApp.Modals.BookModal
+
+@*<div class="card mb-4 shadow">
+    <svg class="bd-placeholder-img card-img-top" height="225" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="card-body">
+    <p class="card-text">This section will be used to display the sort description of books</p>
+    <div class="d-flex justify-content-between align-items-center">
+    <div class="btn-group">
+    <a href="#" class="btn btn-sm btn-outline-secondary">View details</a>
+    </div>
+    <small class="text-muted">Author Name</small>
+    </div>
+    </div>
+    </div>*@
+
+<div class="card mb-4 shadow">
+    <img src="@Model.CoverImageUrl" class="img-thumbnail">
+    <div class="card-body">
+        <h3 class="card-title">@Model.Title</h3>
+        <p class="card-text">@Model.Description</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+                <a asp-controller="book" asp-action="getbook" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">View details</a>
+            </div>
+            <small class="text-muted">@Model.Author</small>
+        </div>
+    </div>
+</div>

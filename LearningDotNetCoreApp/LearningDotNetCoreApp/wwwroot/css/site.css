@@ -13,3 +13,16 @@
     white-space:nowrap;
     line-height:60px;
 }
+
+.modal-dialog {
+    height: 100%
+}
+
+.modal-content {
+    height: 90%
+}
+
+.modal-body {
+    height: 100%;
+    overflow: auto
+}

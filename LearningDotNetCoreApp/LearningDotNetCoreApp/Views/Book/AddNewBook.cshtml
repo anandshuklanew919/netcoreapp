@@ -1,6 +1,6 @@
 ﻿@model BookModal;
 
-<form method="post" class="row g-3">
+<form method="post" enctype="multipart/form-data" class="row g-3">
     <h3 class="display-3">Add new book</h3>
     <hr />
     @if (ViewBag.isSuccess == true)
@@ -11,6 +11,14 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
+
+    <div class="col-md-12">
+        <label asp-for="LanguageId"></label>
+        <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.Language">
+            <option value="">Please select book language</option>
+        </select>
+        <span asp-validation-for="LanguageId" class="text-danger"></span>
+    </div>
 
     <div class="col-md-12">
         <label asp-for="Title"></label>
@@ -31,9 +39,18 @@
     </div>
 
     <div class="col-md-12">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
+        <label asp-for="CoverPhoto" class="form-label"></label>
+        <input asp-for="CoverPhoto" class="form-control"  id="formFile">
+    </div>
+
+      <div class="col-md-12">
+        <label asp-for="GalleryFiles" class="form-label"></label>
+        <input asp-for="GalleryFiles" class="form-control"  id="galleryfiles">
+    </div>
+
+     <div class="col-md-12">
+        <label asp-for="BookPdf" class="form-label"></label>
+        <input asp-for="BookPdf" class="form-control"  id="pdfbook">
     </div>
 
 
