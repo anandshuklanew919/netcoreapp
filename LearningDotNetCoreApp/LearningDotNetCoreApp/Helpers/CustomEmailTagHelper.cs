@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace LearningDotNetCoreApp.Helpers
+namespace required.Helpers
 {
     [HtmlTargetElement("custom-email")]
     public class CustomEmailTagHelper : TagHelper

@@ -1,4 +1,6 @@
-﻿@model BookModal;
+﻿@inject required.Repository.ILanguageRepository languageRepo
+@model BookModal;
+
 
 <form method="post" enctype="multipart/form-data" class="row g-3">
     <h3 class="display-3">Add new book</h3>
@@ -14,7 +16,7 @@
 
     <div class="col-md-12">
         <label asp-for="LanguageId"></label>
-        <select asp-for="LanguageId" class="form-control" asp-items="ViewBag.Language">
+        <select asp-for="LanguageId" class="form-control" asp-items="@(await languageRepo.GetLanguage()).Select(x=> new SelectListItem() {Text = x.Name, Value = x.Id.ToString()})">
             <option value="">Please select book language</option>
         </select>
         <span asp-validation-for="LanguageId" class="text-danger"></span>

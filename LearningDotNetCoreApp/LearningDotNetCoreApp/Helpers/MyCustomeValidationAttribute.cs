@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LearningDotNetCoreApp.Helpers
+namespace required.Helpers
 {
     public class MyCustomeValidationAttribute : ValidationAttribute
     {

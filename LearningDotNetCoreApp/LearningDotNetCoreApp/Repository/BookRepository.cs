@@ -1,14 +1,14 @@
-﻿using LearningDotNetCoreApp.Data;
-using LearningDotNetCoreApp.Modals;
+﻿using required.Data;
+using required.Modals;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LearningDotNetCoreApp.Repository
+namespace required.Repository
 {
-    public class BookRepository
+    public class BookRepository : IBookRepository
     {
 
         private readonly BookStoreContext _context;
@@ -20,7 +20,37 @@ namespace LearningDotNetCoreApp.Repository
         public async Task<List<BookModal>> GetBooks()
         {
             var books = new List<BookModal>();
-            var allbooks = await _context.books.Include(x => x.Language).Include(x=> x.bookGallery).ToListAsync();
+            var allbooks = await _context.books.Include(x => x.Language).Include(x => x.bookGallery).ToListAsync();
+            if (allbooks?.Any() == true)
+            {
+                foreach (var book in allbooks)
+                {
+                    books.Add(new BookModal()
+                    {
+                        Id = book.Id,
+                        Author = book.Author,
+                        Title = book.Title,
+                        Description = book.Description,
+                        TotalPages = book.TotalPages,
+                        Category = book.Category,
+                        LanguageId = book.LanguageId,
+                        CoverImageUrl = book.CoverImageUrl,
+                        BookPdfUrl = book.BookPdfUrl,
+                        Gallery = book.bookGallery.Select(x => new GalleryModel()
+                        {
+                            Name = x.Name,
+                            URL = x.URL
+                        }).ToList()
+                    });
+                }
+            }
+            return books;
+        }
+
+        public async Task<List<BookModal>> GetTopBooksAsync(int count)
+        {
+            var books = new List<BookModal>();
+            var allbooks = await _context.books.Include(x => x.Language).Include(x => x.bookGallery).Take(count).ToListAsync();
             if (allbooks?.Any() == true)
             {
                 foreach (var book in allbooks)
@@ -49,7 +79,7 @@ namespace LearningDotNetCoreApp.Repository
 
         public async Task<BookModal> GetBookById(int id)
         {
-            var data = await _context.books.Include(x => x.Language).Include(x=> x.bookGallery)
+            var data = await _context.books.Include(x => x.Language).Include(x => x.bookGallery)
                         .FirstOrDefaultAsync(book => book.Id == id);
             var book = new BookModal()
             {
@@ -67,7 +97,7 @@ namespace LearningDotNetCoreApp.Repository
                     Name = x.Name,
                     URL = x.URL
                 }).ToList(),
-                BookPdfUrl= data.BookPdfUrl
+                BookPdfUrl = data.BookPdfUrl
             };
             return book;
         }
@@ -119,6 +149,12 @@ namespace LearningDotNetCoreApp.Repository
             await _context.SaveChangesAsync();
 
             return book.Id;
+        }
+
+
+        public string GetBookAppName()
+        {
+            return "Shukla Book Store";
         }
     }
 }

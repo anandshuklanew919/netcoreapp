@@ -1,6 +1,7 @@
-﻿using LearningDotNetCoreApp.Data;
-using LearningDotNetCoreApp.Modals;
-using LearningDotNetCoreApp.Repository;
+﻿using required.Data;
+using required.Modals;
+using required.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +12,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LearningDotNetCoreApp.Controllers
+namespace required.Controllers
 {
     public class BookController : Controller
     {
-        private readonly BookRepository _bookRepository;
-        private readonly LanguageRepository _languageRepository;
+        private readonly IBookRepository _bookRepository;
+        private readonly ILanguageRepository _languageRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public BookController(BookRepository bookRepository, LanguageRepository languageRepository,
+        public BookController(IBookRepository bookRepository, ILanguageRepository languageRepository,
             IWebHostEnvironment webHostEnvironment)
         {
             this._bookRepository = bookRepository;
@@ -50,16 +51,18 @@ namespace LearningDotNetCoreApp.Controllers
         }
 
 
+        [Authorize]
         public async Task<ActionResult> AddNewBook(bool isSuccess = false, int bookId = 0)
         {
             ViewBag.isSuccess = isSuccess;
             ViewBag.BookId = bookId;
 
-            var language = new SelectList(await _languageRepository.GetLanguage(), "Id", "Name");
-            ViewBag.Language = language;
+            //var language = new SelectList(await _languageRepository.GetLanguage(), "Id", "Name");
+            //ViewBag.Language = language;
             return View();
         }
 
+        
         [HttpPost]
         public async Task<ActionResult> AddNewBook(BookModal bookModal)
         {
@@ -105,8 +108,8 @@ namespace LearningDotNetCoreApp.Controllers
                 }
             }
 
-            var language = new SelectList(await _languageRepository.GetLanguage(), "Id", "Name");
-            ViewBag.Language = language;
+            //var language = new SelectList(await _languageRepository.GetLanguage(), "Id", "Name");
+            //ViewBag.Language = language;
             return View();
         }
 

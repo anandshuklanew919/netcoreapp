@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace LearningDotNetCoreApp.Data
+namespace required.Data
 {
     public class Language
     {

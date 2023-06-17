@@ -1,4 +1,4 @@
-﻿namespace LearningDotNetCoreApp.Modals
+﻿namespace required.Modals
 {
     public static class ValidationErrorMsg
     {

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LearningDotNetCoreApp.Data
+namespace required.Data
 {
     public class Books
     {

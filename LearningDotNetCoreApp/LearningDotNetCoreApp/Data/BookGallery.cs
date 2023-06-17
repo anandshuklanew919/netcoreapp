@@ -1,4 +1,4 @@
-﻿namespace LearningDotNetCoreApp.Data
+﻿namespace required.Data
 {
     public class BookGallery
     {
